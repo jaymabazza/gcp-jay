@@ -3,7 +3,7 @@ const app = express();
 
 // This handles the main page request
 app.get('/', (req, res) => {
-  const name = process.env.NAME || 'Cloud Run Developer';
+  const name = process.env.NAME || 'Cloud Run Developer 2';
   res.send(`<h1>Hello ${name}!</h1><p>Your CI/CD pipeline is working!</p>`);
 });
 
