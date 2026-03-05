@@ -1,13 +1,21 @@
-const express = require('express');
-const app = express();
+import express from 'express';
+import { Firestore } from '@google-cloud/firestore';
 
-app.get('/', (req, res) => {
-  // If "MY_NAME" is set in the UI, use it. Otherwise, use "Stranger".
-  const name = process.env.MY_NAME || 'Stranger'; 
-  res.send(`<h1>Hello ${name}!</h1>`);
+const app = express();
+const db = new Firestore(); // Automatically connects using Cloud Run's identity
+
+app.get('/', async (req, res) => {
+  // 1. Write a "visit" to the database
+  const docRef = db.collection('visits').doc('latest');
+  await docRef.set({
+    time: new Date().toISOString(),
+    user: process.env.MY_NAME || 'Unknown'
+  });
+
+  // 2. Read the data back
+  const doc = await docRef.get();
+  res.send(`<h1>Hello ${doc.data().user}!</h1><p>Last visit: ${doc.data().time}</p>`);
 });
 
 const port = parseInt(process.env.PORT) || 8080;
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
-});
+app.listen(port, () => console.log(`Listening on port ${port}`));
