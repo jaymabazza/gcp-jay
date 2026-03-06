@@ -14,7 +14,7 @@ app.get('/', async (req, res) => {
 
   // 2. Read the data back
   const doc = await docRef.get();
-  res.send(`<h1>Hello ${doc.data().user}!</h1><p>Last visit: ${doc.data().time}</p>`);
+  res.send(`<h1>[TEST] Hello ${doc.data().user}!</h1><p>Last visit: ${doc.data().time}</p>`);
 });
 
 const port = parseInt(process.env.PORT) || 8080;
