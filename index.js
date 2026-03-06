@@ -2,7 +2,8 @@ import express from 'express';
 import { Firestore } from '@google-cloud/firestore';
 
 const app = express();
-const db = new Firestore({ databaseId: 'firestore-test' }); // Automatically connects using Cloud Run's identity
+const dbId = process.env.DB_ID_SECRET || '(default)';
+const db = new Firestore({ databaseId: dbId }); // Automatically connects using Cloud Run's identity
 
 app.get('/', async (req, res) => {
   // 1. Write a "visit" to the database
